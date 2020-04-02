@@ -182,7 +182,16 @@ module.exports = require("ramda/src/path");
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+// ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, "StoreContext", function() { return /* binding */ StoreContext; });
+__webpack_require__.d(__webpack_exports__, "StoreProvider", function() { return /* binding */ StoreProvider; });
+__webpack_require__.d(__webpack_exports__, "useStateHook", function() { return /* binding */ useStateHook; });
+__webpack_require__.d(__webpack_exports__, "useDispatchHook", function() { return /* binding */ useDispatchHook; });
+__webpack_require__.d(__webpack_exports__, "useStoreHook", function() { return /* binding */ useStoreHook; });
+__webpack_require__.d(__webpack_exports__, "connect", function() { return /* binding */ connect; });
 
 // EXTERNAL MODULE: external "@babel/runtime/helpers/extends"
 var extends_ = __webpack_require__(2);
@@ -262,12 +271,6 @@ function transBool(obj, flag = true) {
   return newObj;
 }
 // CONCATENATED MODULE: ./src/index.js
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StoreContext", function() { return StoreContext; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "StoreProvider", function() { return StoreProvider; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "useStateHook", function() { return useStateHook; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "useDispatchHook", function() { return useDispatchHook; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "useStoreHook", function() { return useStoreHook; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "connect", function() { return connect; });
 
 
 
@@ -378,7 +381,7 @@ function StoreProvider(props) {
       return origin_dispatch(action);
     }
 
-    if (!isAsyncFunction(action) && inWhich('effects', initStore[asyncKey || action.key], action.type)) {
+    if (!isAsyncFunction(action) && inWhich('effects', initStore[action.key || asyncKey], action.type)) {
       asyncKey = action.key;
       actionAsync = action.type;
       origin_dispatch({
@@ -421,7 +424,7 @@ function StoreProvider(props) {
     return origin_dispatch(action);
   };
 
-  return external_react_default.a.createElement(StoreContext.Provider, {
+  return /*#__PURE__*/external_react_default.a.createElement(StoreContext.Provider, {
     value: {
       state,
       dispatch
@@ -531,7 +534,7 @@ function connect(mapStateToProps, mapDispatchToProps) {
       });
       const stateToProps = mapStateToProps(state);
       const dispatchToProps = mapDispatchToProps(methods);
-      return external_react_default.a.createElement(Comp, extends_default()({}, stateToProps, dispatchToProps, props));
+      return /*#__PURE__*/external_react_default.a.createElement(Comp, extends_default()({}, stateToProps, dispatchToProps, props));
     };
   };
 }
