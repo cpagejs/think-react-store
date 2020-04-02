@@ -40,8 +40,8 @@ function reducer(state, action) {
 }
 
 function StoreProvider(props) {
-  const {store, middleware} = props;
-  if(!store){
+  const { store, middleware } = props;
+  if (!store) {
     console.error(`
       store 必须有值，类似于：
       <StoreProvider store={store}>
@@ -50,7 +50,7 @@ function StoreProvider(props) {
   }
 
   function setLoadingTrue() {
-    if(isEmpty(methodsName)){
+    if (isEmpty(methodsName)) {
       Object.keys(store).forEach(item => {
         methodsName[item] = {
           ...transBool(get([item, 'methods'], store), false),
@@ -61,25 +61,25 @@ function StoreProvider(props) {
     }
   }
   setLoadingTrue()
-  
+
   initStore = store
-  
+
   // 中间件
-  function middlewareReducer(prevState, action){
+  function middlewareReducer(prevState, action) {
     if (!action) {
       return store;
     }
-    
+
     let nextState = reducer(prevState, action);
-    
-    if(middleware){
-      if(!is(Array, middleware)){
+
+    if (middleware) {
+      if (!is(Array, middleware)) {
         throw new Error('middleware中间件必须为数组')
       }
     }
-    middleware && middleware.forEach(item=>{
+    middleware && middleware.forEach(item => {
       const newState = item(store, prevState, nextState, action, actionAsync, asyncKey)
-      if(newState){
+      if (newState) {
         nextState = newState
       }
     })
@@ -102,10 +102,10 @@ function StoreProvider(props) {
       return origin_dispatch(action);
     }
 
-    if(!isAsyncFunction(action) && inWhich('effects', initStore[asyncKey ||  action.key], action.type)){
+    if (!isAsyncFunction(action) && inWhich('effects', initStore[action.key || asyncKey], action.type)) {
       asyncKey = action.key
       actionAsync = action.type
-	  origin_dispatch({
+      origin_dispatch({
         key: asyncKey,
         type: LOADING,
         payload: actionAsync
@@ -133,11 +133,11 @@ function StoreProvider(props) {
         if (is(Function, _action)) {
           asyncKey = action().key
           actionAsync = action().type
-		  origin_dispatch({
-			key: asyncKey,
-			type: LOADING,
-			payload: actionAsync
-		  })
+          origin_dispatch({
+            key: asyncKey,
+            type: LOADING,
+            payload: actionAsync
+          })
           return await _action(origin_dispatch, state, action().payload);
         }
       }
@@ -145,7 +145,7 @@ function StoreProvider(props) {
 
     return origin_dispatch(action);
   }
-  
+
   return (
     <StoreContext.Provider value={{ state, dispatch }}>
       {props.children}
@@ -201,7 +201,7 @@ function useStoreHook() {
         }
       }
     })
-    
+
     _store[key] = {
       ...state[key],
       ..._methods
@@ -211,36 +211,36 @@ function useStoreHook() {
   return _store
 }
 
-function connect(mapStateToProps, mapDispatchToProps){
-  return function(Comp){
-    return function(props){
+function connect(mapStateToProps, mapDispatchToProps) {
+  return function (Comp) {
+    return function (props) {
       const store = useStoreHook()
       const { state } = useContext(StoreContext)
       const rootState = state
       let methods = {}
-      Object.keys(store).forEach(item=>{
+      Object.keys(store).forEach(item => {
         // const _state = rootState[item]
         methods[item] = {}
-        Object.keys(store[item]).forEach(i=>{
-          if(is(Function, store[item][i])){
-            if(isAsyncFunction(store[item][i]) || inWhich('effects', initStore[item], i)){
-              methods[item][i] = function(dispatch, state, payload){
-                return new Promise(async (resolve, reject)=>{
-                  try{
+        Object.keys(store[item]).forEach(i => {
+          if (is(Function, store[item][i])) {
+            if (isAsyncFunction(store[item][i]) || inWhich('effects', initStore[item], i)) {
+              methods[item][i] = function (dispatch, state, payload) {
+                return new Promise(async (resolve, reject) => {
+                  try {
                     await store[item][i](dispatch, rootState, payload)
                     resolve(newData)
-                  }catch(err){
+                  } catch (err) {
                     reject(err)
                   }
                 })
               }
-            }else {
-              methods[item][i] = function(state, payload){
-                return new Promise((resolve, reject)=>{
-                  try{
+            } else {
+              methods[item][i] = function (state, payload) {
+                return new Promise((resolve, reject) => {
+                  try {
                     store[item][i](state, payload)
                     resolve(state)
-                  }catch(err){
+                  } catch (err) {
                     reject(err)
                   }
                 })
@@ -253,7 +253,7 @@ function connect(mapStateToProps, mapDispatchToProps){
       const stateToProps = mapStateToProps(state)
       const dispatchToProps = mapDispatchToProps(methods)
 
-      return <Comp {...stateToProps} {...dispatchToProps} {...props}/>
+      return <Comp {...stateToProps} {...dispatchToProps} {...props} />
     }
   }
 }
