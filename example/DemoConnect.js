@@ -29,8 +29,8 @@ function DemoConnect(props){
   return (
     <div>
       <h1>connect---</h1>
-      <p>loading-getUser->{props.loading.user.getUser ? <span>true</span> : <span>false</span>}</p>
-      <p>loading-setNameAsync->{props.loading.user.setNameAsync ? <span>true</span> : <span>false</span>}</p>
+      <p>loading-getUser->{props?.loading?.user?.getUser ? <span>true</span> : <span>false</span>}</p>
+      <p>loading-setNameAsync->{props?.loading?.user?.setNameAsync ? <span>true</span> : <span>false</span>}</p>
       <p>id: {props.id}</p>
       <p>name: {props.name}</p>
       <button onClick={handelClick}>修改</button>

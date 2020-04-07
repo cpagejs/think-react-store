@@ -1,4 +1,4 @@
-export default function(store, prevState, nextState, action, actionAsync, asyncKey){
+export default function loading(store, prevState, nextState, action, actionAsync, asyncKey){
   if(action.type === 'hook-loading-clear'){
     return {
       ...prevState,

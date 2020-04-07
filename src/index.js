@@ -1,12 +1,15 @@
 import React, { useContext, useReducer } from 'react'
+import { get, run, isAsyncFunction, inWhich, transBool } from './util'
 import is from 'ramda/src/is'
 import clone from 'ramda/src/clone'
+import pick from 'ramda/src/pick'
 import isEmpty from 'ramda/src/isEmpty'
-import { get, run, isAsyncFunction, inWhich, transBool } from './util'
+import mergeDeepRight from 'ramda/src/mergeDeepRight'
 
 const StoreContext = React.createContext()
 
 const LOADING = 'hook-loading-clear'
+const CACHE = 'react-store:cache'
 
 let initialState = {},
   initStore = {}, //传入的store
@@ -49,18 +52,23 @@ function StoreProvider(props) {
     return null
   }
 
-  function setLoadingTrue() {
-    if (isEmpty(methodsName)) {
-      Object.keys(store).forEach(item => {
-        methodsName[item] = {
-          ...transBool(get([item, 'methods'], store), false),
-          ...transBool(get([item, 'reducers'], store), false),
-          ...transBool(get([item, 'effects'], store), false)
-        }
-      })
+  const hasLoadingMiddleware = middleware.filter(item => item.name === 'loading').length
+  const propsCacheExit = props?.cache?.length
+
+  if (hasLoadingMiddleware) {
+    function setLoadingTrue() {
+      if (isEmpty(methodsName)) {
+        Object.keys(store).forEach(item => {
+          methodsName[item] = {
+            ...transBool(get([item, 'methods'], store), false),
+            ...transBool(get([item, 'reducers'], store), false),
+            ...transBool(get([item, 'effects'], store), false)
+          }
+        })
+      }
     }
+    setLoadingTrue()
   }
-  setLoadingTrue()
 
   initStore = store
 
@@ -70,15 +78,16 @@ function StoreProvider(props) {
       return store;
     }
 
-    let nextState = reducer(prevState, action);
-
     if (middleware) {
       if (!is(Array, middleware)) {
         throw new Error('middleware中间件必须为数组')
       }
     }
+
+    let nextState = reducer(prevState, action);
+
     middleware && middleware.forEach(item => {
-      const newState = item(store, prevState, nextState, action, actionAsync, asyncKey)
+      const newState = item(store, prevState, nextState, action, actionAsync, asyncKey, props?.cache)
       if (newState) {
         nextState = newState
       }
@@ -89,11 +98,28 @@ function StoreProvider(props) {
 
   Object.keys(initStore).forEach(item => {
     initialState[item] = initStore[item]['state']
-  })
-  initialState['loading'] = methodsName
+  });
+
+  // 初始化-读取缓存
+  if (!propsCacheExit && localStorage.getItem(CACHE)) { // cache配置没有，但是有localStorage，需要清除
+    localStorage.removeItem(CACHE)
+  }
+  if (propsCacheExit && localStorage.getItem(CACHE)) {
+    initialState = mergeDeepRight(initialState, JSON.parse(localStorage.getItem(CACHE)))
+  }
+
+  if (hasLoadingMiddleware) {
+    initialState['loading'] = methodsName
+  }
 
   const [state, origin_dispatch] = useReducer(middlewareReducer, initialState)
   let _state = clone(state)
+
+  // 页面刷新时候缓存数据
+  propsCacheExit && window.addEventListener('beforeunload', () => {
+    localStorage.setItem(CACHE, JSON.stringify(pick(props.cache, _state)))
+  });
+
 
   const dispatch = async (action, payload, key) => {
     actionAsync = undefined
@@ -105,11 +131,15 @@ function StoreProvider(props) {
     if (!isAsyncFunction(action) && inWhich('effects', initStore[action.key || asyncKey], action.type)) {
       asyncKey = action.key
       actionAsync = action.type
-      origin_dispatch({
-        key: asyncKey,
-        type: LOADING,
-        payload: actionAsync
-      })
+
+      if (hasLoadingMiddleware) {
+        origin_dispatch({
+          key: asyncKey,
+          type: LOADING,
+          payload: actionAsync
+        })
+      }
+
       const func = get([action.key, 'effects', action.type], initStore)
       return await func(origin_dispatch, _state, action.payload)
     }
@@ -117,11 +147,15 @@ function StoreProvider(props) {
     if (isAsyncFunction(action) || get([asyncKey, 'effects', action], initStore)) {
       asyncKey = key
       actionAsync = action.name
-      origin_dispatch({
-        key: asyncKey,
-        type: LOADING,
-        payload: action.name,
-      })
+
+      if (hasLoadingMiddleware) {
+        origin_dispatch({
+          key: asyncKey,
+          type: LOADING,
+          payload: action.name,
+        })
+      }
+
       return await action(origin_dispatch, state, payload);
     }
 
@@ -133,11 +167,15 @@ function StoreProvider(props) {
         if (is(Function, _action)) {
           asyncKey = action().key
           actionAsync = action().type
-          origin_dispatch({
-            key: asyncKey,
-            type: LOADING,
-            payload: actionAsync
-          })
+
+          if (hasLoadingMiddleware) {
+            origin_dispatch({
+              key: asyncKey,
+              type: LOADING,
+              payload: actionAsync
+            })
+          }
+
           return await _action(origin_dispatch, state, action().payload);
         }
       }
