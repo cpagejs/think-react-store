@@ -1,15 +1,11 @@
 import React, { useContext, useReducer } from 'react'
 import { get, run, isAsyncFunction, inWhich, transBool } from './util'
 import is from 'ramda/src/is'
-import clone from 'ramda/src/clone'
-import pick from 'ramda/src/pick'
 import isEmpty from 'ramda/src/isEmpty'
-import mergeDeepRight from 'ramda/src/mergeDeepRight'
 
 const StoreContext = React.createContext()
 
 const LOADING = 'hook-loading-clear'
-const CACHE = 'react-store:cache'
 
 let initialState = {},
   initStore = {}, //传入的store
@@ -52,7 +48,7 @@ function StoreProvider(props) {
     return null
   }
 
-  const hasLoadingMiddleware = middleware.filter(item => item.name === 'loading').length
+  const hasLoadingMiddleware = middleware?.filter(item => item.name === 'loading')?.length
   const propsCacheExit = props?.cache?.length
 
   if (hasLoadingMiddleware) {
@@ -92,7 +88,7 @@ function StoreProvider(props) {
         nextState = newState
       }
     })
-
+    
     return nextState;
   }
 
@@ -100,26 +96,11 @@ function StoreProvider(props) {
     initialState[item] = initStore[item]['state']
   });
 
-  // 初始化-读取缓存
-  if (!propsCacheExit && localStorage.getItem(CACHE)) { // cache配置没有，但是有localStorage，需要清除
-    localStorage.removeItem(CACHE)
-  }
-  if (propsCacheExit && localStorage.getItem(CACHE)) {
-    initialState = mergeDeepRight(initialState, JSON.parse(localStorage.getItem(CACHE)))
-  }
-
-  if (hasLoadingMiddleware) {
+  if (hasLoadingMiddleware && !initialState['loading']) {
     initialState['loading'] = methodsName
   }
-
-  const [state, origin_dispatch] = useReducer(middlewareReducer, initialState)
-  let _state = clone(state)
-
-  // 页面刷新时候缓存数据
-  propsCacheExit && window.addEventListener('beforeunload', () => {
-    localStorage.setItem(CACHE, JSON.stringify(pick(props.cache, _state)))
-  });
-
+  
+  let [state, origin_dispatch] = useReducer(middlewareReducer, initialState)
 
   const dispatch = async (action, payload, key) => {
     actionAsync = undefined
@@ -141,7 +122,7 @@ function StoreProvider(props) {
       }
 
       const func = get([action.key, 'effects', action.type], initStore)
-      return await func(origin_dispatch, _state, action.payload)
+      return await func(origin_dispatch, state, action.payload)
     }
 
     if (isAsyncFunction(action) || get([asyncKey, 'effects', action], initStore)) {

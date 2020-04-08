@@ -5,7 +5,11 @@ export default {
   },
   methods: {
     getOrder(state, payload){
-      console.log('get-order-info',state, payload)
+      // console.log('get-order-info',state, payload)
+      return {
+        ...state,
+        ...payload
+      }
     }
   }
 }

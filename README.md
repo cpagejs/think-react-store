@@ -335,14 +335,16 @@ const mapState = ({user:{id, name}, loading}) => ({
 <p>loading-setNameAsync->{props.loading.user.setNameAsync ? <span>true</span> : <span>false</span>}</p>
 ```
 
-## 7 使用缓存（刷新浏览器使用缓存数据）
+## 7 使用缓存（将 model 的数据缓存到 localStorage 里面）
 ```
+import cache from '@cpage/react-store/middlewares/cache';
+
 <StoreProvider 
   store={store} 
+  middleware={[cache]}
   cache={['user']}
 >
     
 </StoreProvider>
 ```
-配置 cache 属性即可，cache 的值为数组，元素是 model 的名称，如果数组为空则不缓存数据。数据被缓存到 localStorage 里面。
-备注：此处的缓存只在浏览器刷新后才生效！
+配置 cache 属性，cache 的值为数组，元素是 model 的名称，如果数组为空则不缓存数据。数据被缓存到 localStorage 里面。

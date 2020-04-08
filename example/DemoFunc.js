@@ -1,11 +1,15 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { StoreContext, useStoreHook, useStateHook, useDispatchHook } from '../src';
 
 export default function DemoFunc(){
   const {state, dispatch} = useContext(StoreContext)
-  const {user:{id, name, getUser, getAuth, setName}} = useStoreHook()
+  const {user:{id, name, getUser, getAuth, setName}, order} = useStoreHook()
   const userInfo = useStateHook('user')
-  const dispatchs = useDispatchHook('user')
+  const userDispatch = useDispatchHook('user')
+
+  useEffect(() => {
+
+  }, [])
 
   const handleAuth = ()=>{
     // 方法1
@@ -16,7 +20,10 @@ export default function DemoFunc(){
       id: '456',
       name: '同步修改'
     })
-
+    order.getOrder({
+      id: 'a123-修改',
+      name: 'order info-修改'
+    })
     // 方法2
     // dispatchs({
     //   // key: 'user',
@@ -42,11 +49,12 @@ export default function DemoFunc(){
     //   name: '异步修改'
     // })
 
-    dispatchs(()=>({
+    userDispatch(()=>({
       key: 'user',
       // type: 'getAuth',
       type: 'setNameAsync',
       payload: {
+        id: 789,
         name: '异步修改'
       }
     }))
@@ -55,7 +63,9 @@ export default function DemoFunc(){
   return (
     <div>
       <h1>function 类型组件</h1>
-      <p>用户：name--{name}   id--{state.user.id} --- {userInfo.id}</p>
+      <p>user id：{state.user.id} --- {userInfo.id}</p>
+      <p>user name：{name}</p>
+  <p>{order.id}</p>
       <p><button onClick={handleAuth}>修改用户</button></p>
       <p><button onClick={handleAuthAsync}>异步修改用户</button></p>
     </div>

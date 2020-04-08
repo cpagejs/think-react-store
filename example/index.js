@@ -7,13 +7,14 @@ import DemoFunc from './DemoFunc';
 import DemoConnect from './DemoConnect';
 import log from '../middlewares/log';
 import loading from '../middlewares/loading';
+import cache from '../middlewares/cache';
 
 var mountNode = document.getElementById("app");
 ReactDOM.render(
   <StoreProvider 
     store={store} 
-    middleware={[loading]}
-    cache={['user']}
+    middleware={[cache]}
+    cache={['user', 'order']}
   >
     <DemoClass />
     <DemoFunc />

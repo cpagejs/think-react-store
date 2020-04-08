@@ -7,7 +7,8 @@ function DemoConnect(props){
   const handelClick = ()=>{
     // console.log(props.loading)
     props.getUser({
-      id: 456
+      id: 456,
+      name: '同步修改'
     })
     .then(res=>{
       console.log(res)
@@ -19,7 +20,8 @@ function DemoConnect(props){
 
   const handelClickAsync = ()=>{
     props.setNameAsync({
-      id: 789
+      id: 789,
+      name: '异步修改'
     })
     .then(res=>{
       console.log('handelClickAsync',res)
@@ -29,7 +31,6 @@ function DemoConnect(props){
   return (
     <div>
       <h1>connect---</h1>
-      <p>loading-getUser->{props?.loading?.user?.getUser ? <span>true</span> : <span>false</span>}</p>
       <p>loading-setNameAsync->{props?.loading?.user?.setNameAsync ? <span>true</span> : <span>false</span>}</p>
       <p>id: {props.id}</p>
       <p>name: {props.name}</p>

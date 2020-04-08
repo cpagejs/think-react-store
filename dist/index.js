@@ -91,7 +91,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 8);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -144,30 +144,6 @@ module.exports = require("ramda/src/path");
 
 /***/ }),
 /* 4 */
-/*!**********************************!*\
-  !*** external "ramda/src/clone" ***!
-  \**********************************/
-/*! no static exports found */
-/*! exports used: default */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports) {
-
-module.exports = require("ramda/src/clone");
-
-/***/ }),
-/* 5 */
-/*!*********************************!*\
-  !*** external "ramda/src/pick" ***!
-  \*********************************/
-/*! no static exports found */
-/*! exports used: default */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports) {
-
-module.exports = require("ramda/src/pick");
-
-/***/ }),
-/* 6 */
 /*!************************************!*\
   !*** external "ramda/src/isEmpty" ***!
   \************************************/
@@ -179,31 +155,16 @@ module.exports = require("ramda/src/pick");
 module.exports = require("ramda/src/isEmpty");
 
 /***/ }),
-/* 7 */
-/*!*******************************************!*\
-  !*** external "ramda/src/mergeDeepRight" ***!
-  \*******************************************/
-/*! no static exports found */
-/*! exports used: default */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports) {
-
-module.exports = require("ramda/src/mergeDeepRight");
-
-/***/ }),
-/* 8 */
+/* 5 */
 /*!**********************************!*\
   !*** ./src/index.js + 1 modules ***!
   \**********************************/
 /*! exports provided: StoreContext, StoreProvider, useStateHook, useDispatchHook, useStoreHook, connect */
 /*! all exports used */
 /*! ModuleConcatenation bailout: Cannot concat with external "@babel/runtime/helpers/extends" (<- Module is not an ECMAScript module) */
-/*! ModuleConcatenation bailout: Cannot concat with external "ramda/src/clone" (<- Module is not an ECMAScript module) */
 /*! ModuleConcatenation bailout: Cannot concat with external "ramda/src/is" (<- Module is not an ECMAScript module) */
 /*! ModuleConcatenation bailout: Cannot concat with external "ramda/src/isEmpty" (<- Module is not an ECMAScript module) */
-/*! ModuleConcatenation bailout: Cannot concat with external "ramda/src/mergeDeepRight" (<- Module is not an ECMAScript module) */
 /*! ModuleConcatenation bailout: Cannot concat with external "ramda/src/path" (<- Module is not an ECMAScript module) */
-/*! ModuleConcatenation bailout: Cannot concat with external "ramda/src/pick" (<- Module is not an ECMAScript module) */
 /*! ModuleConcatenation bailout: Cannot concat with external "react" (<- Module is not an ECMAScript module) */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -288,21 +249,9 @@ function transBool(obj, flag = true) {
   });
   return newObj;
 }
-// EXTERNAL MODULE: external "ramda/src/clone"
-var clone_ = __webpack_require__(4);
-var clone_default = /*#__PURE__*/__webpack_require__.n(clone_);
-
-// EXTERNAL MODULE: external "ramda/src/pick"
-var pick_ = __webpack_require__(5);
-var pick_default = /*#__PURE__*/__webpack_require__.n(pick_);
-
 // EXTERNAL MODULE: external "ramda/src/isEmpty"
-var isEmpty_ = __webpack_require__(6);
+var isEmpty_ = __webpack_require__(4);
 var isEmpty_default = /*#__PURE__*/__webpack_require__.n(isEmpty_);
-
-// EXTERNAL MODULE: external "ramda/src/mergeDeepRight"
-var mergeDeepRight_ = __webpack_require__(7);
-var mergeDeepRight_default = /*#__PURE__*/__webpack_require__.n(mergeDeepRight_);
 
 // CONCATENATED MODULE: ./src/index.js
 
@@ -310,12 +259,8 @@ var mergeDeepRight_default = /*#__PURE__*/__webpack_require__.n(mergeDeepRight_)
 
 
 
-
-
-
 const StoreContext = external_react_default.a.createContext();
 const LOADING = 'hook-loading-clear';
-const CACHE = 'react-store:cache';
 let initialState = {},
     initStore = {},
     //传入的store
@@ -353,7 +298,7 @@ function reducer(state, action) {
 }
 
 function StoreProvider(props) {
-  var _props$cache;
+  var _middleware$filter, _props$cache;
 
   const {
     store,
@@ -368,7 +313,7 @@ function StoreProvider(props) {
     return null;
   }
 
-  const hasLoadingMiddleware = middleware.filter(item => item.name === 'loading').length;
+  const hasLoadingMiddleware = middleware === null || middleware === void 0 ? void 0 : (_middleware$filter = middleware.filter(item => item.name === 'loading')) === null || _middleware$filter === void 0 ? void 0 : _middleware$filter.length;
   const propsCacheExit = props === null || props === void 0 ? void 0 : (_props$cache = props.cache) === null || _props$cache === void 0 ? void 0 : _props$cache.length;
 
   if (hasLoadingMiddleware) {
@@ -412,29 +357,13 @@ function StoreProvider(props) {
 
   Object.keys(initStore).forEach(item => {
     initialState[item] = initStore[item]['state'];
-  }); // 初始化-读取缓存
+  });
 
-  if (!propsCacheExit && localStorage.getItem(CACHE)) {
-    // cache配置没有，但是有localStorage，需要清除
-    localStorage.removeItem(CACHE);
-  }
-
-  if (propsCacheExit && localStorage.getItem(CACHE)) {
-    initialState = mergeDeepRight_default()(initialState, JSON.parse(localStorage.getItem(CACHE)));
-  }
-
-  if (hasLoadingMiddleware) {
+  if (hasLoadingMiddleware && !initialState['loading']) {
     initialState['loading'] = methodsName;
   }
 
-  const [state, origin_dispatch] = Object(external_react_["useReducer"])(middlewareReducer, initialState);
-
-  let _state = clone_default()(state); // 页面刷新时候缓存数据
-
-
-  propsCacheExit && window.addEventListener('beforeunload', () => {
-    localStorage.setItem(CACHE, JSON.stringify(pick_default()(props.cache, _state)));
-  });
+  let [state, origin_dispatch] = Object(external_react_["useReducer"])(middlewareReducer, initialState);
 
   const dispatch = async (action, payload, key) => {
     actionAsync = undefined;
@@ -456,7 +385,7 @@ function StoreProvider(props) {
       }
 
       const func = get([action.key, 'effects', action.type], initStore);
-      return await func(origin_dispatch, _state, action.payload);
+      return await func(origin_dispatch, state, action.payload);
     }
 
     if (isAsyncFunction(action) || get([asyncKey, 'effects', action], initStore)) {
