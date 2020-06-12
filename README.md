@@ -1,12 +1,14 @@
-## @cpage/react-store
-基于 react hooks 和 context api 实现的类似的 redux 的数据管理库。支持数据存储，方法调用，可以在 class 组件和 function 组件中使用，支持同步和异步的方法调用。
+# @cpage/react-store
+[@cpage/react-store](https://github.com/cpagejs/react-store) 基于 react hooks 和 context api 实现的类似的 redux 的数据管理库。支持数据存储，方法调用，可以在 class 组件和 function 组件中使用，支持同步和异步的方法调用。
 
-### 安装
+[GitHub 仓库地址](https://github.com/cpagejs/react-store)
+
+## 安装
 ```
 npm i --save @cpage/react-store
 ```
 
-### api 介绍  
+## api 介绍  
 
 | api | 作用 | 适合场景 |  
 | --- | --- | --- |  
@@ -32,7 +34,7 @@ npm i --save @cpage/react-store
 ],
 ```
 
-## 1,创建 context
+## 1，创建 context
 
 | 属性 | 含义 |  
 | --- | --- |  
@@ -73,7 +75,7 @@ export default {
 export { default as user } from './user'
 ```
 
-## 2,配置 StoreProvider
+## 2，配置 StoreProvider
 ```
 import { StoreProvider } from '@cpage/react-store';
 import * as store from './Contexts';
@@ -85,7 +87,7 @@ ReactDOM.render(
 mountNode);
 ```
 
-## 使用 connect (推荐)
+## 3，使用 connect (推荐)
 备注：使用 connect 绑定的方法返回一个 promise 对象
 ```
 const mapState = ({user:{id, name}}) => ({
@@ -112,7 +114,7 @@ const handelClick = ()=>{
 }
 ```
 
-## 3,在 function 组件中使用
+## 4，在 function 组件中使用
 ```
 import React, { useContext } from "react";
 import { StoreContext, useStoreHook } from '@cpage/react-store';
@@ -145,7 +147,7 @@ export default function DemoFunc(){
 ```
 备注：function 组件中使用 @cpage/react-store ，有多种调用方法。
 
-### 3.1 获取 state 数据
+### 4.1，获取 state 数据
 使用 useStoreHook（推荐使用）
 ```
 import React, { useContext } from "react";
@@ -178,7 +180,7 @@ const states = useStateHook()
 const userState = useStateHook('user')
 ```
 
-### 3.2 使用 dispatch
+### 4.2，使用 dispatch
 使用 useStoreHook（推荐使用），同步和异步的调用方式一样，只需要传递参数即可
 ```
 import { useStoreHook } from '@cpage/react-store';
@@ -249,7 +251,7 @@ dispatchs(()=>({
 }))
 ```
 
-## 4,在 class 组件中使用
+## 5，在 class 组件中使用
 在 class 组件中使用 dispatch 调用异步函数时候，this.context.dispatch 里面的参数是函数；使用 dispatch 调用同步函数时候，this.context.dispatch 里面的参数是函数是 json 对象。
 ```
 import React from "react";
@@ -289,8 +291,8 @@ export default class DemoClass extends React.Component {
 }
 ```
 
-## 5，中间件
-### 5.1 新增中间件文件
+## 6，中间件
+### 6.1，新增中间件文件
 ```
 /**
  * 中间件参数
@@ -299,14 +301,14 @@ export default class DemoClass extends React.Component {
  * @param {Object} nextState 更新后的state值
  * @param {Object} action 派发的action
  */
-export default function(store, prevState, nextState, action){
+export default function log(store, prevState, nextState, action){
   console.log('----日志log-----')
   console.log(`修改前：${JSON.stringify(prevState)}`)
   console.log(`修改后：${JSON.stringify(nextState)}`)
 }
 ```
 
-### 5.2 使用中间件
+### 6.2，使用中间件
 备注：middleware 的类型为数组
 ```
 <StoreProvider store={store} middleware={[log]}>
@@ -314,7 +316,7 @@ export default function(store, prevState, nextState, action){
 </StoreProvider>
 ```
 
-## 6 loading
+## 7，loading
 ```
 // 需要引入loading中间件
 import loading from '@cpage/react-store/middlewares/loading'
@@ -331,11 +333,11 @@ const mapState = ({user:{id, name}, loading}) => ({
   loading
 });
 
-<p>loading-getUser->{props.loading.user.getUser ? <span>true</span> : <span>false</span>}</p>
+// 一般 loading 只需要异步函数中使用
 <p>loading-setNameAsync->{props.loading.user.setNameAsync ? <span>true</span> : <span>false</span>}</p>
 ```
 
-## 7 使用缓存（将 model 的数据缓存到 localStorage 里面）
+## 8，使用缓存（将 model 的数据缓存到 localStorage 里面）
 ```
 import cache from '@cpage/react-store/middlewares/cache';
 
@@ -348,3 +350,5 @@ import cache from '@cpage/react-store/middlewares/cache';
 </StoreProvider>
 ```
 配置 cache 属性，cache 的值为数组，元素是 model 的名称，如果数组为空则不缓存数据。数据被缓存到 localStorage 里面。
+
+ps：如果在使用过程中遇到什么问题/或者有改进的意见，欢迎👏在 [issues](https://github.com/cpagejs/react-store/issues) 里面交流！欢迎🌟！

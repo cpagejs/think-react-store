@@ -1,6 +1,6 @@
 {
   "name": "@cpage/react-store",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": "基于react hooks 和 context 实现类似与 redux",
   "main": "dist/index.js",
   "scripts": {
