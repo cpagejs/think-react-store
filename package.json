@@ -1,6 +1,6 @@
 {
   "name": "@cpage/react-store",
-  "version": "1.6.3",
+  "version": "1.6.4",
   "description": "基于react hooks 和 context 实现的类似与 redux 的数据流工具",
   "main": "dist/index.js",
   "scripts": {

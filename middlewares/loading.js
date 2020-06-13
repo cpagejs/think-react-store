@@ -1,3 +1,12 @@
+/**
+ * 日志中间件
+ * @param {*} store 
+ * @param {*} prevState 
+ * @param {*} nextState 
+ * @param {*} action 
+ * @param {*} actionAsync 
+ * @param {*} asyncKey 
+ */
 export default function loading(store, prevState, nextState, action, actionAsync, asyncKey){
   if(action.type === 'hook-loading-clear'){
     return {
