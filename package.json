@@ -1,6 +1,6 @@
 {
   "name": "@cpage/react-store",
-  "version": "1.6.4",
+  "version": "1.6.5",
   "description": "基于react hooks 和 context 实现的类似与 redux 的数据流工具",
   "main": "dist/index.js",
   "scripts": {
@@ -49,5 +49,16 @@
     "react-hooks",
     "context",
     "redux"
-  ]
+  ],
+  "directories": {
+    "example": "example"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cpagejs/react-store.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cpagejs/react-store/issues"
+  },
+  "homepage": "https://github.com/cpagejs/react-store#readme"
 }
