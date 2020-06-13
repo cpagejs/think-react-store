@@ -1,7 +1,7 @@
 {
   "name": "@cpage/react-store",
-  "version": "1.6.2",
-  "description": "基于react hooks 和 context 实现类似与 redux",
+  "version": "1.6.3",
+  "description": "基于react hooks 和 context 实现的类似与 redux 的数据流工具",
   "main": "dist/index.js",
   "scripts": {
     "dev": "webpack-dev-server --hot --inline --progress --colors --config build/webpack.dev.conf.js",
