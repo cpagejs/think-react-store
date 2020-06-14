@@ -1,6 +1,6 @@
 {
-  "name": "@cpage/react-store",
-  "version": "1.6.5",
+  "name": "think-react-store",
+  "version": "1.6.6",
   "description": "基于react hooks 和 context 实现的类似与 redux 的数据流工具",
   "main": "dist/index.js",
   "scripts": {
@@ -55,10 +55,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cpagejs/react-store.git"
+    "url": "git+https://github.com/cpagejs/think-react-store.git"
   },
   "bugs": {
-    "url": "https://github.com/cpagejs/react-store/issues"
+    "url": "https://github.com/cpagejs/think-react-store/issues"
   },
-  "homepage": "https://github.com/cpagejs/react-store#readme"
+  "homepage": "https://github.com/cpagejs/think-react-store#readme"
 }

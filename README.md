@@ -1,11 +1,11 @@
-# @cpage/react-store
-[@cpage/react-store](https://github.com/cpagejs/react-store) 基于 react hooks 和 context api 实现的类似的 redux 的数据管理库。支持数据存储，方法调用，可以在 class 组件和 function 组件中使用，支持同步和异步的方法调用。
+# think-react-store
+[think-react-store](https://github.com/cpagejs/react-store) 基于 react hooks 和 context api 实现的类似的 redux 的数据管理库。支持数据存储，方法调用，可以在 class 组件和 function 组件中使用，支持同步和异步的方法调用。
 
 [GitHub 仓库地址](https://github.com/cpagejs/react-store)
 
 ## 安装
 ```js
-npm i --save @cpage/react-store
+npm i --save think-react-store
 ```
 
 ## api 介绍  
@@ -77,7 +77,7 @@ export { default as user } from './user'
 
 ## 2，配置 StoreProvider
 ```js
-import { StoreProvider } from '@cpage/react-store';
+import { StoreProvider } from 'think-react-store';
 import * as store from './Contexts';
 
 ReactDOM.render(
@@ -119,7 +119,7 @@ const handelClick = ()=>{
 
 ```js
 import React, { useContext } from "react";
-import { StoreContext, useStoreHook } from '@cpage/react-store';
+import { StoreContext, useStoreHook } from 'think-react-store';
 
 export default function DemoFunc(){
   const {state, dispatch} = useContext(StoreContext)
@@ -147,13 +147,13 @@ export default function DemoFunc(){
   )
 }
 ```
-备注：function 组件中使用 @cpage/react-store ，有多种调用方法。
+备注：function 组件中使用 think-react-store ，有多种调用方法。
 
 ### 4.1，获取 state 数据
 使用 useStoreHook（推荐使用）
 ```js
 import React, { useContext } from "react";
-import { useStoreHook } from '@cpage/react-store';
+import { useStoreHook } from 'think-react-store';
 
 const {user:{id, name, setName, setNameAsync}} = useStoreHook()
 
@@ -163,7 +163,7 @@ const {user:{id, name, setName, setNameAsync}} = useStoreHook()
 使用 useContext + StoreContext
 ```js
 import React, { useContext } from "react";
-import { StoreContext } from '@cpage/react-store';
+import { StoreContext } from 'think-react-store';
 
 // state 指的是所有 context 的 state
 const {state, dispatch} = useContext(StoreContext)
@@ -173,7 +173,7 @@ const {state, dispatch} = useContext(StoreContext)
 
 使用 useStateHook，useStateHook 接受一个参数，如果不传则返回所有 state，传递对应的 key 则返回对应的 state
 ```js
-import { useStateHook } from '@cpage/react-store';
+import { useStateHook } from 'think-react-store';
 
 // 获取所有的
 const states = useStateHook()
@@ -185,7 +185,7 @@ const userState = useStateHook('user')
 ### 4.2，使用 dispatch
 使用 useStoreHook（推荐使用），同步和异步的调用方式一样，只需要传递参数即可
 ```js
-import { useStoreHook } from '@cpage/react-store';
+import { useStoreHook } from 'think-react-store';
 
 const {user:{id, name, setName, setNameAsync}} = useStoreHook()
 
@@ -197,7 +197,7 @@ getUser({
 使用 useContext + StoreContext，如果是异步调用参数需要为函数
 ```js
 import React, { useContext } from "react";
-import { StoreContext } from '@cpage/react-store';
+import { StoreContext } from 'think-react-store';
 
 // state 指的是所有 context 的 state
 const {state, dispatch} = useContext(StoreContext)
@@ -223,7 +223,7 @@ dispatch(()=>({
 
 使用 useDispatchHook，useDispatchHook 接受一个参数，如果不传那么在使用 dispatch 使用需要携带上。如果是异步调用参数需要为函数
 ```js
-import { useDispatchHook } from '@cpage/react-store';
+import { useDispatchHook } from 'think-react-store';
 
 // 不带参数 key
 const dispatchs = useDispatchHook()
@@ -257,7 +257,7 @@ dispatchs(()=>({
 在 class 组件中使用 dispatch 调用异步函数时候，this.context.dispatch 里面的参数是函数；使用 dispatch 调用同步函数时候，this.context.dispatch 里面的参数是函数是 json 对象。
 ```js
 import React from "react";
-import { StoreContext } from '@cpage/react-store';
+import { StoreContext } from 'think-react-store';
 
 export default class DemoClass extends React.Component {
   static contextType = StoreContext;
@@ -321,7 +321,7 @@ export default function log(store, prevState, nextState, action){
 ## 7，loading
 ```js
 // 需要引入loading中间件
-import loading from '@cpage/react-store/middlewares/loading'
+import loading from 'think-react-store/middlewares/loading'
 
 // 配置
 <StoreProvider store={store} middleware={[loading]}>
@@ -341,7 +341,7 @@ const mapState = ({user:{id, name}, loading}) => ({
 
 ## 8，使用缓存（将 model 的数据缓存到 localStorage 里面）
 ```js
-import cache from '@cpage/react-store/middlewares/cache';
+import cache from 'think-react-store/middlewares/cache';
 
 <StoreProvider 
   store={store} 
