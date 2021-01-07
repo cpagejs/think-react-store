@@ -36,15 +36,7 @@ declare namespace connect{
 /**
  * 全局用的 provider，应用于app.js 或者单个模块的根文件
  */
-declare interface StoreProvider {
-		
-	/**
-	 * 
-	 * @param props 
-	 * @return  
-	 */
-	new (props : any): boolean;
-}
+declare function StoreProvider(props : any);
 
 
 /**
@@ -66,7 +58,7 @@ declare function useStateHook(key : String): void;
  * }
  * @return  
  */
-declare function useStoreHook(): Ret;
+declare function useStoreHook(): any;
 
 /**
  * 添加属性和方法到组件中，应用于function 和 class 组件
@@ -74,7 +66,7 @@ declare function useStoreHook(): Ret;
  * @param mapDispatchToProps dispatch派发的方法，包括 reducers 和 effects 里面的方法
  * @return  
  */
-declare function connect(mapStateToProps : any, mapDispatchToProps : any): Ret;
+declare function connect(mapStateToProps : any, mapDispatchToProps : any): any;
 
 /**
  * 
