@@ -259,7 +259,7 @@ var isEmpty_default = /*#__PURE__*/__webpack_require__.n(isEmpty_);
 
 
 
-const StoreContext = external_react_default.a.createContext();
+const StoreContext = /*#__PURE__*/external_react_default.a.createContext();
 const LOADING = 'hook-loading-clear';
 let initialState = {},
     initStore = {},
