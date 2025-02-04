@@ -4,10 +4,10 @@
   "description": "基于react hooks 和 context 实现的类似与 redux 的数据流工具",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "webpack-dev-server --hot --progress --config ./build/webpack.dev.conf.js",
+    "dev": "webpack serve --config .webpack/webpack.config.js --hot --progress",
     "start": "npm run dev",
-    "build": "webpack --progress --config build/webpack.prod.conf.js",
-    "build:min": "cross-env MIN=true webpack --progress  --config build/webpack.prod.conf.js",
+    "build": "webpack --progress --config .webpack/webpack.prod.js",
+    "build:min": "cross-env MIN=true webpack --progress  --config .webpack/webpack.prod.js",
     "build:lib": "cross-env BABEL_ENV=umd babel src/index.js --out-dir lib"
   },
   "author": "cpagejs",
@@ -36,7 +36,7 @@
     "style-loader": "^4.0.0",
     "url-loader": "^4.1.1",
     "webpack": "^5.97.1",
-    "webpack-cli": "^6.0.1",
+    "webpack-cli": "^6.0.0",
     "webpack-dev-server": "^5.2.0",
     "webpack-merge": "^6.0.1",
     "webpack-node-externals": "^3.0.0"
