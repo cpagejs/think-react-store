@@ -1,16 +1,19 @@
 module.exports = {
-  "presets": [
-    ["@babel/preset-env", {
-      "targets": {
-        "chrome": "64"
-        // "browsers": ["last 2 versions", "safari >= 7"]
+  presets: [
+    [
+      "@babel/preset-env",
+      {
+        targets: {
+          chrome: "80",
+          // "browsers": ["last 2 versions", "safari >= 7"]
+        },
+        // useBuiltIns: "usage"
       },
-      // useBuiltIns: "usage"
-    }],
-    "@babel/preset-react"
+    ],
+    "@babel/preset-react",
   ],
-  "plugins": [
+  plugins: [
     "@babel/plugin-proposal-class-properties",
-    "@babel/plugin-transform-runtime"
-  ]
-}
+    "@babel/plugin-transform-runtime",
+  ],
+};
